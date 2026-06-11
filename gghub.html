@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GGHub — Igraj odmah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #18181f;
+    --bg4: #1e1e28;
+    --accent: #7c5cfc;
+    --accent2: #a78bfa;
+    --accent-glow: rgba(124,92,252,0.18);
+    --green: #22d3a5;
+    --orange: #f97316;
+    --pink: #f472b6;
+    --yellow: #fbbf24;
+    --text: #f1f0ff;
+    --text2: #9896b8;
+    --text3: #5a5875;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --font: 'Space Grotesk', sans-serif;
+    --mono: 'Space Mono', monospace;
+    --r: 12px;
+    --r2: 16px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; }
+
+  /* ─── NAV ─────────────────────────────────────────── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo {
+    font-family: var(--mono); font-size: 22px; font-weight: 700;
+    color: var(--text); text-decoration: none; letter-spacing: -1px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-logo .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-links a {
+    color: var(--text2); text-decoration: none; font-size: 14px; font-weight: 500;
+    padding: 6px 14px; border-radius: 8px; transition: all .15s;
+  }
+  .nav-links a:hover { color: var(--text); background: var(--bg3); }
+  .nav-badge {
+    background: var(--accent); color: #fff; font-size: 11px; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; font-family: var(--mono);
+  }
+
+  /* ─── HERO ─────────────────────────────────────────── */
+  .hero {
+    padding: 5rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse at center, rgba(124,92,252,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; font-weight: 600; color: var(--accent2);
+    font-family: var(--mono); letter-spacing: .04em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow::before { content: '●'; color: var(--green); font-size: 9px; }
+  .hero h1 {
+    font-size: clamp(42px, 7vw, 78px);
+    font-weight: 700; line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub {
+    font-size: 18px; color: var(--text2); max-width: 480px;
+    margin: 0 auto 2.5rem; line-height: 1.65;
+  }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: var(--r); padding: 13px 28px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: var(--font); transition: all .15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(124,92,252,.35); }
+  .btn-secondary {
+    background: transparent; color: var(--text2);
+    border: 1px solid var(--border2); border-radius: var(--r); padding: 13px 28px;
+    font-size: 15px; font-weight: 500; cursor: pointer;
+    font-family: var(--font); transition: all .15s;
+  }
+  .btn-secondary:hover { background: var(--bg3); color: var(--text); }
+  .hero-stats {
+    display: flex; gap: 2px; justify-content: center; margin-top: 3rem;
+    border-top: 1px solid var(--border); padding-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .hero-stat { padding: 0 2.5rem; text-align: center; }
+  .hero-stat + .hero-stat { border-left: 1px solid var(--border); }
+  .hero-stat .num { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--text); }
+  .hero-stat .lbl { font-size: 12px; color: var(--text3); margin-top: 3px; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ─── SECTION ─────────────────────────────────────── */
+  section { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px; }
+  .section-title { font-size: 22px; font-weight: 700; letter-spacing: -.5px; }
+  .section-title span { color: var(--accent); }
+  .section-link { font-size: 13px; color: var(--accent2); text-decoration: none; font-weight: 500; }
+  .section-link:hover { color: var(--text); }
+  .tag {
+    display: inline-block; font-size: 10px; font-weight: 700; font-family: var(--mono);
+    letter-spacing: .08em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 6px; margin-bottom: 8px;
+  }
+  .tag-edu { background: rgba(34,211,165,.12); color: var(--green); }
+  .tag-puzzle { background: rgba(251,191,36,.12); color: var(--yellow); }
+  .tag-action { background: rgba(249,115,22,.12); color: var(--orange); }
+  .tag-creative { background: rgba(244,114,182,.12); color: var(--pink); }
+  .tag-new { background: rgba(124,92,252,.2); color: var(--accent2); }
+  .tag-hot { background: rgba(249,115,22,.2); color: var(--orange); }
+  .tag-soon { background: rgba(90,88,117,.2); color: var(--text3); }
+
+  /* ─── FEATURED GAME ──────────────────────────────── */
+  .featured-card {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--r2);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color .2s, transform .2s;
+  }
+  .featured-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .featured-card.open { border-color: var(--accent); }
+  .featured-header {
+    display: grid; grid-template-columns: 280px 1fr;
+    gap: 0;
+  }
+  @media(max-width:700px){ .featured-header{ grid-template-columns:1fr; } }
+  .featured-thumb {
+    background: linear-gradient(135deg, #1a1030 0%, #0d1a30 50%, #0a1510 100%);
+    min-height: 220px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .featured-thumb::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(124,92,252,.15), transparent);
+  }
+  .featured-info { padding: 1.75rem; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+  .featured-info h2 { font-size: 26px; font-weight: 700; letter-spacing: -.5px; }
+  .featured-info p { font-size: 14px; color: var(--text2); line-height: 1.65; }
+  .featured-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+  .meta-pill {
+    font-size: 12px; color: var(--text3); background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 3px 10px; font-family: var(--mono);
+  }
+  .play-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: var(--r); padding: 11px 22px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: var(--font); transition: all .15s;
+    margin-top: 6px; width: fit-content;
+  }
+  .play-btn:hover { background: var(--accent2); box-shadow: 0 6px 20px rgba(124,92,252,.4); }
+  .play-btn svg { width: 16px; height: 16px; fill: white; }
+  .game-frame { display: none; border-top: 1px solid var(--border); background: var(--bg); }
+  .game-frame.visible { display: block; }
+  .game-frame iframe { width: 100%; border: none; display: block; min-height: 640px; background: var(--bg); }
+  .game-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+  }
+  .game-topbar span { font-size: 13px; color: var(--text2); font-family: var(--mono); }
+  .close-btn {
+    background: transparent; border: 1px solid var(--border2);
+    color: var(--text2); border-radius: 8px; padding: 5px 12px;
+    font-size: 12px; cursor: pointer; font-family: var(--font);
+    transition: all .15s;
+  }
+  .close-btn:hover { background: var(--bg4); color: var(--text); }
+
+  /* ─── GAME GRID ──────────────────────────────────── */
+  .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .game-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--r2); overflow: hidden;
+    cursor: pointer; transition: all .18s; position: relative;
+  }
+  .game-card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.4); }
+  .game-card.locked { opacity: .55; cursor: not-allowed; }
+  .game-thumb {
+    height: 130px; display: flex; align-items: center; justify-content: center;
+    font-size: 52px; position: relative; overflow: hidden;
+  }
+  .thumb-1 { background: linear-gradient(135deg, #1a0a2e, #2d1b69); }
+  .thumb-2 { background: linear-gradient(135deg, #0a1a2e, #0a3a5a); }
+  .thumb-3 { background: linear-gradient(135deg, #0a2e1a, #0a4a2e); }
+  .thumb-4 { background: linear-gradient(135deg, #2e1a0a, #5a2e0a); }
+  .thumb-5 { background: linear-gradient(135deg, #2e0a1a, #5a0a2e); }
+  .thumb-6 { background: linear-gradient(135deg, #1a2e0a, #2e5a0a); }
+  .thumb-7 { background: linear-gradient(135deg, #0a2e2e, #0a4a4a); }
+  .thumb-8 { background: linear-gradient(135deg, #2e2a0a, #5a520a); }
+  .thumb-9 { background: linear-gradient(135deg, #1a0a0a, #3a1a1a); }
+  .thumb-10 { background: linear-gradient(135deg, #0a0a2e, #1a1a5a); }
+  .thumb-11 { background: linear-gradient(135deg, #1e0a2e, #3e1a5a); }
+  .thumb-12 { background: linear-gradient(135deg, #0a1e2e, #1a3e5e); }
+  .game-card-body { padding: 12px 14px; }
+  .game-card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .game-card-meta { display: flex; align-items: center; justify-content: space-between; }
+  .game-card-cat { font-size: 11px; color: var(--text3); }
+  .stars { font-size: 11px; color: var(--yellow); letter-spacing: 1px; }
+  .lock-overlay {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(10,10,15,.8); border-radius: 8px;
+    padding: 4px 8px; font-size: 11px; color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  /* ─── CATEGORIES ─────────────────────────────────── */
+  .cat-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .cat-strip::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text2); border-radius: var(--r); padding: 8px 16px;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    font-family: var(--font); white-space: nowrap; transition: all .15s;
+    flex-shrink: 0;
+  }
+  .cat-btn:hover, .cat-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* ─── LEADERBOARD ────────────────────────────────── */
+  .leaderboard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); overflow: hidden; }
+  .lb-row {
+    display: grid; grid-template-columns: 36px 1fr 60px 80px;
+    align-items: center; padding: 12px 16px; gap: 12px;
+    border-bottom: 1px solid var(--border); font-size: 14px;
+  }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row.header { font-size: 11px; color: var(--text3); font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; background: var(--bg3); }
+  .lb-rank { font-family: var(--mono); font-weight: 700; text-align: center; }
+  .lb-rank.gold { color: var(--yellow); }
+  .lb-rank.silver { color: #a0a0b8; }
+  .lb-rank.bronze { color: #cd7f32; }
+  .lb-player { display: flex; align-items: center; gap: 10px; }
+  .lb-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .lb-score { font-family: var(--mono); font-weight: 700; color: var(--accent2); text-align: right; }
+  .lb-game { font-size: 12px; color: var(--text3); text-align: right; }
+
+  /* ─── FOOTER ─────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border); padding: 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px; max-width: 1200px; margin: 2rem auto 0;
+  }
+  .footer-logo { font-family: var(--mono); font-weight: 700; font-size: 18px; color: var(--text2); }
+  .footer-logo span { color: var(--accent); }
+  footer p { font-size: 13px; color: var(--text3); }
+
+  /* ─── INNOVATION TYCOON inline styles ───────────────── */
+  #tycoon-wrap {
+    font-family: var(--font);
+    color: var(--text);
+    padding: 1.5rem;
+    background: var(--bg);
+    min-height: 600px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="dot"></div>
+    GG<span>Hub</span>
+  </a>
+  <div class="nav-links">
+    <a href="#igrice">Igrice</a>
+    <a href="#top">Top liste</a>
+    <a href="#novo">Novo</a>
+    <span class="nav-badge">BETA</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Besplatno igraj u browseru</div>
+  <h1>Igraj.<br><em>Uči. Pobijedi.</em></h1>
+  <p class="hero-sub">Browser igrice bez instalacije. Poduzetništvo, puzzles, akcija — sve na jednom mjestu.</p>
+  <div class="hero-actions">
+    <a href="#igrice" class="btn-primary">Pregledaj igrice</a>
+    <button class="btn-secondary" onclick="openFeatured()">▶ Igraj odmah</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">12</div><div class="lbl">Igrica</div></div>
+    <div class="hero-stat"><div class="num">100%</div><div class="lbl">Besplatno</div></div>
+    <div class="hero-stat"><div class="num">0</div><div class="lbl">Instalacija</div></div>
+    <div class="hero-stat"><div class="num">∞</div><div class="lbl">Zabave</div></div>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<section id="igrice">
+  <div class="section-header">
+    <div class="section-title">⭐ <span>Istaknuta</span> igrica</div>
+    <a href="#" class="section-link">Sve igrice →</a>
+  </div>
+  <div class="featured-card" id="featured-card">
+    <div class="featured-header" onclick="toggleFeatured()">
+      <div class="featured-thumb">💡</div>
+      <div class="featured-info">
+        <div>
+          <span class="tag tag-edu">Edukacija</span>
+          <span class="tag tag-new" style="margin-left:4px">Novo</span>
+        </div>
+        <h2>Innovation Tycoon</h2>
+        <p>Počni u garaži s 500€ i izgradi startup koji mijenja svijet. Svaka odluka nosi pravu lekciju o poduzetništvu — od customer discovery-ja do akvizicije.</p>
+        <div class="featured-meta">
+          <span class="meta-pill">8 poglavlja</span>
+          <span class="meta-pill">~15 min</span>
+          <span class="meta-pill">HR jezik</span>
+          <span class="meta-pill" style="color:var(--yellow)">★ 4.8</span>
+        </div>
+        <button class="play-btn" id="play-featured-btn" onclick="openFeatured(event)">
+          <svg viewBox="0 0 16 16"><path d="M3 2l10 6-10 6V2z"/></svg>
+          Igraj sada
+        </button>
+      </div>
+    </div>
+    <div class="game-frame" id="featured-frame">
+      <div class="game-topbar">
+        <span>▶ Innovation Tycoon — igraš</span>
+        <button class="close-btn" onclick="closeFeatured(event)">✕ Zatvori</button>
+      </div>
+      <div id="tycoon-wrap"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section>
+  <div class="cat-strip">
+    <button class="cat-btn active">🎮 Sve</button>
+    <button class="cat-btn">📚 Edukacija</button>
+    <button class="cat-btn">🧩 Puzzle</button>
+    <button class="cat-btn">⚡ Akcija</button>
+    <button class="cat-btn">🎨 Kreativne</button>
+    <button class="cat-btn">🏆 Multiplayer</button>
+  </div>
+</section>
+
+<!-- GAME GRID -->
+<section id="novo">
+  <div class="section-header">
+    <div class="section-title">🎮 Sve <span>igrice</span></div>
+  </div>
+  <div class="game-grid">
+
+    <div class="game-card" onclick="openFeatured()">
+      <div class="game-thumb thumb-1">💡</div>
+      <div class="game-card-body">
+        <div class="tag tag-edu">Edukacija</div>
+        <div class="game-card-name">Innovation Tycoon</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Startup sim</span>
+          <span class="stars">★★★★★</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-2">🧠</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-soon">Uskoro</div>
+        <div class="game-card-name">Brain Rush</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Puzzle</span>
+          <span class="stars">★★★★☆</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-3">🌍</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-soon">Uskoro</div>
+        <div class="game-card-name">Geo Master</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Edukacija</span>
+          <span class="stars">★★★★☆</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-4">⚡</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-action">Akcija</div>
+        <div class="game-card-name">Pixel Blitz</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Arkada</span>
+          <span class="stars">★★★★★</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-5">🎨</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-creative">Kreativno</div>
+        <div class="game-card-name">DrawDuel</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Multiplayer</span>
+          <span class="stars">★★★★☆</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-6">🌱</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-soon">Uskoro</div>
+        <div class="game-card-name">EcoBuilder</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Strategija</span>
+          <span class="stars">★★★★★</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-7">🔢</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-puzzle">Puzzle</div>
+        <div class="game-card-name">NumFlow</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Maths</span>
+          <span class="stars">★★★☆☆</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-8">📜</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-edu">Edukacija</div>
+        <div class="game-card-name">History Quest</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Kviz</span>
+          <span class="stars">★★★★☆</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-9">🚀</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-action">Akcija</div>
+        <div class="game-card-name">Orbit Run</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Endless run</span>
+          <span class="stars">★★★★★</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-10">💻</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-edu">Edukacija</div>
+        <div class="game-card-name">Code Breaker</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Programiranje</span>
+          <span class="stars">★★★★☆</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-11">🎭</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-creative">Kreativno</div>
+        <div class="game-card-name">Story Forge</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Narativno</span>
+          <span class="stars">★★★★★</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-card locked">
+      <div class="game-thumb thumb-12">🧬</div>
+      <div class="lock-overlay">Uskoro</div>
+      <div class="game-card-body">
+        <div class="tag tag-puzzle">Puzzle</div>
+        <div class="game-card-name">DNA Puzzle</div>
+        <div class="game-card-meta">
+          <span class="game-card-cat">Biologija</span>
+          <span class="stars">★★★☆☆</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<section id="top">
+  <div class="section-header">
+    <div class="section-title">🏆 Top <span>lista</span></div>
+    <a href="#" class="section-link">Puna lista →</a>
+  </div>
+  <div class="leaderboard">
+    <div class="lb-row header">
+      <div>#</div>
+      <div>Igrač</div>
+      <div>Bodovi</div>
+      <div>Igrica</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank gold">🥇</div>
+      <div class="lb-player"><div class="lb-avatar" style="background:#2d1b69">🧠</div><div>StartupKing99</div></div>
+      <div class="lb-score">4.850</div>
+      <div class="lb-game">Inn. Tycoon</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank silver">🥈</div>
+      <div class="lb-player"><div class="lb-avatar" style="background:#0a3a5a">⚡</div><div>ZagrebGenius</div></div>
+      <div class="lb-score">4.620</div>
+      <div class="lb-game">Inn. Tycoon</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank bronze">🥉</div>
+      <div class="lb-player"><div class="lb-avatar" style="background:#0a4a2e">🌍</div><div>PixelMaster_HR</div></div>
+      <div class="lb-score">4.390</div>
+      <div class="lb-game">Inn. Tycoon</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank" style="color:var(--text3)">4</div>
+      <div class="lb-player"><div class="lb-avatar" style="background:#2e1a0a">🔥</div><div>TechFounder</div></div>
+      <div class="lb-score">4.100</div>
+      <div class="lb-game">Inn. Tycoon</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank" style="color:var(--text3)">5</div>
+      <div class="lb-player"><div class="lb-avatar" style="background:#2e0a1a">🎯</div><div>InnovateCRO</div></div>
+      <div class="lb-score">3.970</div>
+      <div class="lb-game">Inn. Tycoon</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">GG<span>Hub</span></div>
+  <p>© 2026 GGHub — Browser gaming platforma</p>
+  <p style="font-size:12px; color:var(--text3)">v1.0 BETA · Made with ♥ u HR</p>
+</footer>
+
+<!-- ═══ INNOVATION TYCOON GAME ENGINE ══════════════════════════════════ -->
+<script>
+const SCENES = [
+  {
+    id:0, tag:"🏠 Garaža, dan 1", title:"Iskra ideje",
+    desc:"Sjediš u garaži s laptopom i 500€. Imaš ideju za aplikaciju koja pomaže studentima organizirati učenje. Nitko još ne zna za tebe. Što je prvi korak?",
+    tip:"💡 Poduzetništvo kreće od validacije — provjeri ima li netko problem koji rješavaš prije nego izgradis produkt.",
+    choices:[
+      {icon:"🛠️",label:"Odmah počni kodirati",desc:"Potrošiš 3 tjedna na MVP",effect:{money:-200,energy:-20,rep:5,growth:5},feedback:"neutral",msg:"Imaš nešto opipljivo! Ali nisi siguran hoće li korisnici htjeti koristiti to."},
+      {icon:"🗣️",label:"Razgovaraj s 10 studenata",desc:"Istražuješ problem direktno",effect:{money:-20,energy:-5,rep:10,growth:10},feedback:"good",msg:"Otkrivaš da studenti zapravo više pate od prokrastinacije nego organizacije. Prilagodiš ideju — ovo je customer discovery! 🎯"},
+      {icon:"📝",label:"Napiši poslovni plan",desc:"Formaliziraš ideju na papiru",effect:{money:0,energy:-10,rep:3,growth:2},feedback:"neutral",msg:"Dobar plan, ali bez povratnih informacija stvarnog tržišta plan je samo pretpostavka."}
+    ]
+  },
+  {
+    id:1, tag:"⚡ Tjedan 2", title:"Prva kriza",
+    desc:"Tvoj jedini suosnivač kaže da odustaje — ima posao u velikoj firmi. Ostaješ sam s polovičnim prototipom. Rok do prvog pitcha je za 2 tjedna.",
+    tip:"💡 Odabir suosnivača jedna je od najvažnijih odluka u startupu. Motivacija i vrijednosti moraju se podudarati.",
+    choices:[
+      {icon:"😤",label:"Nastavi sam i pojačaj tempo",desc:"Raditi 14h/dan do roka",effect:{money:0,energy:-30,rep:5,growth:8},feedback:"neutral",msg:"Uspiješ napraviti demo, ali si iscrpljen. Burnout je realan rizik za poduzetnike."},
+      {icon:"🤝",label:"Traži novog suosnivača brzo",desc:"Objavi na LinkedIn i Reddit-u",effect:{money:-50,energy:-5,rep:8,growth:5},feedback:"good",msg:"Nalaziš dizajnera sa iskustvom. Komplementarne vještine jačaju tim!"},
+      {icon:"📅",label:"Odgodi pitch za 2 tjedna",desc:"Nemaš gotov produkt",effect:{money:0,energy:5,rep:-5,growth:0},feedback:"bad",msg:"Investitori ne vole čekanje bez razloga. Gube povjerenje."}
+    ]
+  },
+  {
+    id:2, tag:"📊 Tjedan 4", title:"Prve mušterije",
+    desc:"Prototip je gotov! Imaš 3 načina da privučeš prvih 100 korisnika. Svaki košta vrijeme ili novac.",
+    tip:"💡 Rast ne dolazi sam. U ranoj fazi growth hacking je ručan posao — direktno contactiranje, zajednice, WOM.",
+    choices:[
+      {icon:"📢",label:"Plati oglašavanje na Instagramu",desc:"200€ za kampanju",effect:{money:-200,energy:-5,rep:5,growth:15},feedback:"neutral",msg:"Dobivaš 80 korisnika, ali cijena po korisniku je previsoka za ovu fazu."},
+      {icon:"🏫",label:"Idi osobno po fakultetima",desc:"Direktno pitaj studente",effect:{money:-30,energy:-20,rep:15,growth:20},feedback:"good",msg:"Skupiš 120 prvih korisnika i dobiješ neprocjenjivu povratnu informaciju. Organic growth! 📈"},
+      {icon:"🤳",label:"Pošalji influenceru na TikToku",desc:"Besplatno korištenje za promociju",effect:{money:-80,energy:-5,rep:10,growth:12},feedback:"neutral",msg:"Dobar doseg, ali korisnici od influencera brzo odlaze ako produkt nije odličan."}
+    ]
+  },
+  {
+    id:3, tag:"💼 Tjedan 6", title:"Investitor na horizontu",
+    desc:"Angel investitor želi se naći s tobom. Ima 50.000€. Želi 40% udjela tvrtke. Tvoja procjena je 100.000€.",
+    tip:"💡 Valuacija u ranoj fazi je pregovori, ne matematika. Pripremi se s podacima — brojevima korisnika, rastom, retencijom.",
+    choices:[
+      {icon:"🤝",label:"Pristani na 40%",desc:"Brzi novac, ali gubi kontrolu",effect:{money:40000,energy:5,rep:10,growth:10},feedback:"bad",msg:"Dobiješ novac, ali predaješ previše kontrole prerano. Slijedeća runda će biti teška."},
+      {icon:"📊",label:"Pregovaraj na 20% za 50k€",desc:"Pripremi pitch s podacima",effect:{money:45000,energy:-10,rep:20,growth:20},feedback:"good",msg:"Odlično! Investitor cijeni tvoju pripremljenost i pristaje. Dobiješ novac i zadržiš kontrolu. 🎉"},
+      {icon:"🚶",label:"Odbij i traži veću evaluaciju",desc:"Čekaš bolju ponudu",effect:{money:-100,energy:0,rep:5,growth:0},feedback:"neutral",msg:"Možda si u pravu, ali bez kapitala rast stagnira. Timing je važan."}
+    ]
+  },
+  {
+    id:4, tag:"🔥 Tjedan 9", title:"Konkurencija udara",
+    desc:"Velika firma objavljuje sličnu aplikaciju — besplatno. Korisnici počinju odlaziti. Imaš 2 tjedna da reaguješ.",
+    tip:"💡 Kao startup, ne možeš pobijediti veliku firmu u resurse. Pobjeđuješ brzinom, fokusiranom nišom i boljim iskustvom.",
+    choices:[
+      {icon:"⚔️",label:"Napravi i ti besplatnu verziju",desc:"Matchaj ih direktno",effect:{money:-5000,energy:-15,rep:0,growth:-10},feedback:"bad",msg:"Ušao si u rat cijenama koji ne možeš dugoročno dobiti. Prihodi padaju."},
+      {icon:"🎯",label:"Dublje idi u nišu",desc:"Fokus na medicinske studente",effect:{money:-1000,energy:-10,rep:15,growth:25},feedback:"good",msg:"Genijalno! Medicinski studenti imaju posebne potrebe koje opća aplikacija ne rješava. Postajete #1 u niši. 🩺"},
+      {icon:"🤜",label:"Kontaktiraj veliku firmu za partnerstvo",desc:"Ako ne možeš pobijediti — pridruži se",effect:{money:2000,energy:-5,rep:10,growth:5},feedback:"neutral",msg:"Sklopite deal, ali izgubite neovisnost u razvoju. Kompromis."}
+    ]
+  },
+  {
+    id:5, tag:"📰 Tjedan 12", title:"Mediji i PR",
+    desc:"Novinar TechCrunch-a želi intervju. Imaš impresivne brojke, ali i neke bugove u produktu. Izlaziš javno?",
+    tip:"💡 PR može ubrzati rast, ali i uništiti startup ako je produkt nezreo. Timing je sve.",
+    choices:[
+      {icon:"📣",label:"Prihvati intervju odmah",desc:"Visibility je sve!",effect:{money:0,energy:-5,rep:25,growth:30},feedback:"good",msg:"Članak izlazi i dobivaš 500 novih korisnika! Bugovi postoje ali tim ih brzo fixa. Momentum je ključan."},
+      {icon:"🛠️",label:"Odgodi dok ne fixaš bugove",desc:"Još 2 tjedna poliranja",effect:{money:0,energy:-15,rep:10,growth:10},feedback:"neutral",msg:"Dolaziš spreman, ali novinar je već objavio drugu priču. Prozor se zatvorio."},
+      {icon:"🎤",label:"Prihvati ali budi transparentan",desc:"Pokaži roadmap, ne samo uspjehe",effect:{money:0,energy:-5,rep:30,growth:20},feedback:"good",msg:"Autentičnost osvaja! Zajednica te hvali zbog iskrenosti. Reputacija raste brže od metrika."}
+    ]
+  },
+  {
+    id:6, tag:"🌍 Tjedan 16", title:"Skaliranje",
+    desc:"Imaš 2.000 plaćenih korisnika i stabilne prihode. Možeš skalirati na EU tržište ili produbiti produkt za domaće tržište.",
+    tip:"💡 Skalirati prerano jedna je od top 5 grešaka startupa. Provjeri: je li produkt zaista spreman za novo tržište?",
+    choices:[
+      {icon:"🌍",label:"Agresivno u EU odmah",desc:"Velicko tržište = veliki rizik",effect:{money:-15000,energy:-25,rep:10,growth:20},feedback:"neutral",msg:"Dolaziš na EU, ali lokalizacija i pravni zahtjevi koštaju više nego si planirao."},
+      {icon:"🔬",label:"Dublje razvij produkt",desc:"AI funkcije, bolji onboarding",effect:{money:-5000,energy:-15,rep:20,growth:30},feedback:"good",msg:"Ulaganje u produkt povećava retention za 40%. Korisnici ostaju i plaćaju više."},
+      {icon:"🤝",label:"Nađi lokalnog partnera za EU",desc:"Smanjiš rizik, dijeliš profit",effect:{money:-3000,energy:-10,rep:25,growth:25},feedback:"good",msg:"Pametan potez! Partner donosi lokalno znanje i mreže. Sporiji ali stabilniji rast."}
+    ]
+  },
+  {
+    id:7, tag:"🏁 Kraj putovanja", title:"Velika ponuda",
+    desc:"Korporacija nudi akviziciju — 1.2 milijuna eura za 100% tvrtke. Ili možeš nastaviti samostalno prema Series A rundi financiranja.",
+    tip:"💡 Exit ili rast — nema krivog odgovora. Sve ovisi o tvojim osobnim ciljevima i viziji za produkt.",
+    choices:[
+      {icon:"💰",label:"Prodaj za 1.2M€",desc:"Uzmi novac i počni sljedeći projekt",effect:{money:800000,energy:20,rep:30,growth:0},feedback:"good",msg:"Čestitamo! Uspješan exit. Koristiš iskustvo i kapital za sljedeći startup. 🎊"},
+      {icon:"🚀",label:"Odbij i idi na Series A",desc:"Tražiš 500k€ za 15%",effect:{money:300000,energy:-15,rep:40,growth:50},feedback:"good",msg:"Ambiciozan potez! Dobivaš veći kapital i visoku evaluaciju."},
+      {icon:"🧘",label:"Ostani bootstrapped",desc:"Rasti organsky, bez vanjskog novca",effect:{money:50000,energy:10,rep:35,growth:20},feedback:"neutral",msg:"Kontrola i neovisnost. Sporiji rast, ali tvrtka je 100% tvoja."}
+    ]
+  }
+];
+
+let gs = {}, currentScene = 0, gameStarted = false;
+
+function openFeatured(e) {
+  if (e) e.stopPropagation();
+  const frame = document.getElementById('featured-frame');
+  const card = document.getElementById('featured-card');
+  frame.classList.add('visible');
+  card.classList.add('open');
+  document.getElementById('play-featured-btn').textContent = '⏸ Pauziraj';
+  if (!gameStarted) { initGame(); gameStarted = true; }
+  frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeFeatured(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('featured-frame').classList.remove('visible');
+  document.getElementById('featured-card').classList.remove('open');
+  document.getElementById('play-featured-btn').innerHTML = '<svg viewBox="0 0 16 16" width="16" height="16" fill="white"><path d="M3 2l10 6-10 6V2z"/></svg> Igraj sada';
+}
+
+function toggleFeatured() {
+  const frame = document.getElementById('featured-frame');
+  if (frame.classList.contains('visible')) { closeFeatured(); } else { openFeatured(); }
+}
+
+function initGame() {
+  gs = { money: 500, energy: 100, rep: 0, growth: 0 };
+  currentScene = 0;
+  renderGame();
+}
+
+function renderGame() {
+  const wrap = document.getElementById('tycoon-wrap');
+  const s = SCENES[currentScene];
+  const pct = Math.round((currentScene / SCENES.length) * 100);
+
+  wrap.innerHTML = `
+    <div style="max-width:680px; margin:0 auto;">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1rem;">
+        ${statPill('💰', 'Novac', fmtMoney(gs.money))}
+        ${statPill('❤️', 'Energija', gs.energy + '%')}
+        ${statPill('⭐', 'Reputacija', gs.rep)}
+        ${statPill('📈', 'Rast', gs.growth + '%')}
+      </div>
+      <div style="height:3px; background:rgba(255,255,255,0.08); border-radius:2px; margin-bottom:6px; overflow:hidden;">
+        <div style="height:100%; width:${pct}%; background:#7c5cfc; border-radius:2px; transition:width .4s;"></div>
+      </div>
+      <div style="font-size:11px; color:#5a5875; text-align:right; margin-bottom:1rem; font-family:monospace;">Poglavlje ${currentScene+1} / ${SCENES.length}</div>
+
+      <div style="background:#111118; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1.25rem; margin-bottom:1rem;">
+        <div style="font-size:11px; font-weight:700; color:#5a5875; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;">${s.tag}</div>
+        <div style="font-size:20px; font-weight:700; margin-bottom:10px; letter-spacing:-.4px;">${s.title}</div>
+        <p style="font-size:14px; color:#9896b8; line-height:1.65; margin:0;">${s.desc}</p>
+      </div>
+
+      <div style="background:rgba(124,92,252,0.08); border:1px solid rgba(124,92,252,0.2); border-radius:10px; padding:10px 14px; font-size:13px; color:#a78bfa; margin-bottom:1rem;">${s.tip}</div>
+
+      <div style="display:flex; flex-direction:column; gap:10px;" id="choice-list">
+        ${s.choices.map((c, i) => `
+          <button onclick="pickChoice(${i})" style="background:#111118; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px 16px; text-align:left; cursor:pointer; font-family:'Space Grotesk',sans-serif; color:#f1f0ff; display:flex; gap:12px; align-items:flex-start; transition:background .12s;" onmouseover="this.style.background='#1e1e28'" onmouseout="this.style.background='#111118'">
+            <span style="font-size:20px; flex-shrink:0; margin-top:1px;">${c.icon}</span>
+            <span><strong style="display:block; font-weight:600; margin-bottom:3px; font-size:14px;">${c.label}</strong><small style="color:#5a5875; font-size:12px;">${c.desc}</small></span>
+          </button>`).join('')}
+      </div>
+    </div>`;
+}
+
+function statPill(icon, lbl, val) {
+  return `<div style="background:#18181f; border-radius:10px; padding:8px 14px; font-size:13px; color:#9896b8; flex:1; min-width:80px;">${icon} ${lbl}<div style="font-size:17px; font-weight:700; color:#f1f0ff; margin-top:2px;">${val}</div></div>`;
+}
+
+function fmtMoney(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M€';
+  if (n >= 1000) return Math.round(n/1000) + 'k€';
+  return n + '€';
+}
+
+function pickChoice(idx) {
+  const s = SCENES[currentScene];
+  const c = s.choices[idx];
+  gs.money += c.effect.money;
+  gs.energy = Math.max(0, Math.min(100, gs.energy + c.effect.energy));
+  gs.rep += c.effect.rep;
+  gs.growth += c.effect.growth;
+
+  const fbColor = c.feedback === 'good' ? {bg:'rgba(34,211,165,.1)',border:'rgba(34,211,165,.3)',text:'#22d3a5',icon:'✅'}
+    : c.feedback === 'bad' ? {bg:'rgba(239,68,68,.1)',border:'rgba(239,68,68,.25)',text:'#f87171',icon:'⚠️'}
+    : {bg:'rgba(124,92,252,.08)',border:'rgba(124,92,252,.2)',text:'#a78bfa',icon:'ℹ️'};
+
+  const wrap = document.getElementById('tycoon-wrap');
+  const choiceList = document.getElementById('choice-list');
+  choiceList.innerHTML = `
+    <div style="background:${fbColor.bg}; border:1px solid ${fbColor.border}; border-radius:10px; padding:14px 16px; font-size:14px; color:${fbColor.text}; line-height:1.6; margin-bottom:10px;">
+      ${fbColor.icon} ${c.msg}
+    </div>
+    <button onclick="goNext()" style="background:#7c5cfc; color:#fff; border:none; border-radius:10px; padding:12px 24px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Space Grotesk',sans-serif; transition:background .15s;" onmouseover="this.style.background='#a78bfa'" onmouseout="this.style.background='#7c5cfc'">
+      Nastavi →
+    </button>`;
+
+  const hudDivs = wrap.querySelectorAll('[id^=""]');
+  const statDivs = wrap.querySelector('div').querySelectorAll('div');
+  if (statDivs[0]) statDivs[0].querySelector('div').textContent = fmtMoney(gs.money);
+}
+
+function goNext() {
+  currentScene++;
+  if (currentScene >= SCENES.length) { showEndGame(); return; }
+  renderGame();
+}
+
+function showEndGame() {
+  const score = gs.rep + gs.growth + (gs.energy > 50 ? 20 : 0);
+  let rank, icon, sub, lesson;
+  if (gs.money >= 100000 && score >= 150) { rank='Legenda';icon='🏆';sub='Izgradio si jednog od vodećih ed-tech startupa u regiji.';lesson='Validacija ideje, izgradnja tima i pametni pregovori vode do uspjeha.'; }
+  else if (score >= 100) { rank='Uspješni Founder';icon='🚀';sub='Tvoj startup raste i imaš solidan tim.';lesson='Konzistentnost i fokus na korisnika donose dugoročan rast.'; }
+  else if (score >= 60) { rank='Iskusni Poduzetnik';icon='📈';sub='Preživio si turbulencije. Sljedeći startup bit će bolji.';lesson='Greške su normalne — ključno je brzo učiti i adaptirati se.'; }
+  else { rank='Hrabri Starter';icon='🌱';sub='Nisi uspio ovaj put, ali steknuto iskustvo je neprocjenjivo.';lesson='Poduzetništvo je maraton. Probaj opet s novim znanjem.'; }
+
+  document.getElementById('tycoon-wrap').innerHTML = `
+    <div style="max-width:560px; margin:0 auto; text-align:center; padding:2rem 1rem;">
+      <div style="font-size:64px; margin-bottom:1rem;">${icon}</div>
+      <div style="font-size:26px; font-weight:700; margin-bottom:8px; letter-spacing:-.5px;">${rank}</div>
+      <p style="font-size:15px; color:#9896b8; margin-bottom:1.5rem; line-height:1.65;">${sub}</p>
+      <div style="display:flex; gap:8px; justify-content:center; margin-bottom:1.5rem; flex-wrap:wrap;">
+        ${statPill('💰','Novac',fmtMoney(gs.money))}
+        ${statPill('⭐','Reputacija',gs.rep)}
+        ${statPill('📈','Rast',gs.growth+'%')}
+      </div>
+      <div style="background:rgba(124,92,252,.08); border:1px solid rgba(124,92,252,.2); border-radius:12px; padding:14px 18px; font-size:13px; color:#a78bfa; text-align:left; margin-bottom:1.5rem;">
+        <strong style="display:block; margin-bottom:4px; color:#c4b5fd;">Lekcija:</strong>${lesson}
+      </div>
+      <button onclick="restartGame()" style="background:#7c5cfc; color:#fff; border:none; border-radius:12px; padding:13px 30px; font-size:15px; font-weight:600; cursor:pointer; font-family:'Space Grotesk',sans-serif;">
+        🔄 Igraj opet
+      </button>
+    </div>`;
+}
+
+function restartGame() {
+  gs = { money: 500, energy: 100, rep: 0, growth: 0 };
+  currentScene = 0;
+  renderGame();
+}
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
